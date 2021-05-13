@@ -77,8 +77,10 @@ class PrzechowywaczZlotych:
 class badPlateNum(Exception):
     def __init__(self, val):
         self._val = val
+
     def __str__(self):
         return repr(self._val)
+
 
 class Parkomat(PrzechowywaczZlotych):
     _validPlateNums = [chr(i) for i in range(ord('0'), ord('Z') + 1) if i < ord('9') + 1 or i > ord('A') - 1]
@@ -86,6 +88,7 @@ class Parkomat(PrzechowywaczZlotych):
     def __init__(self, plateNum, values):
         super().__init__(values)
         self.today = datetime.now()
+        self.departure = datetime.now()
         self._parkTime = 0
         for c in plateNum:
             if c not in self._validPlateNums:
@@ -104,33 +107,45 @@ class Parkomat(PrzechowywaczZlotych):
 
     def addDay(self):
         self.today = (self.today + timedelta(days=1))
-        print(self.today)
 
     def subDay(self):
         self.today = (self.today - timedelta(days=1))
-        print(self.today)
 
-    def add5Mins(self):
-        self.today = (self.today + timedelta(minutes=5))
-        print(self.today)
+    def addHour(self):
+        self.today = (self.today + timedelta(hours=1))
 
-    def sub5Mins(self):
-        self.today = (self.today - timedelta(minutes=5))
-        print(self.today)
+    def subHour(self):
+        self.today = (self.today - timedelta(hours=1))
+
+    def addMin(self):
+        self.today = (self.today + timedelta(minutes=1))
+
+    def subMin(self):
+        self.today = (self.today - timedelta(minutes=1))
+
+def updateTime(x):
+    if x == "+day":
+        parkomat.addDay()
+    elif x == "-day":
+        parkomat.subDay()
+    elif x == "+hour":
+        parkomat.addHour()
+    elif x == "-hour":
+        parkomat.subHour()
+    elif x == "+min":
+        parkomat.addMin()
+    elif x == "-min":
+        parkomat.subMin()
+    currentDay.config(text=parkomat.today.strftime("%D"))
+    currentHour.config(text=parkomat.today.strftime("%H:%M"))
 
 
-# tutaj kod testowy \/  \/  \/  \/
-
-#tab = [chr(i) for i in range(ord('0'), ord('Z') + 1) if i < ord('9') + 1 or i > ord('A') - 1]
-#print(tab)
-
-# tutaj kod testowy /\  /\  /\  /\
 # TWORZENIE TABELI
 parkomat = Parkomat("KR12AB3", [0.01, 0.02, 0.05, 0.20, 0.5, 1, 2, 5, 10, 20, 50])
 
 # Tworzenie okna
 window = Tk()
-window.geometry("780x780")
+window.geometry("780x300")
 window.resizable(0, 0)
 window.title("Parkomat")
 
@@ -144,33 +159,56 @@ mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
 ttk.Button(mainframe, width=20, text="Nr. rejestracyjny").grid(column=0, row=0, ipady=0)
 ttk.Button(mainframe, width=20, text=parkomat.plateNum).grid(column=0, row=1, ipady=10)
 ttk.Label(mainframe, width=20).grid(column=1, row=4)  # przerwa
+ttk.Button(mainframe, width=20, text=parkomat.plateNum).grid(column=0, row=1, ipady=10)
 
 # Data
-ttk.Button(mainframe, width=20, text="Data").grid(column=2, row=0, ipady=0)
-ttk.Button(mainframe, width=20, text=parkomat.today.strftime("%D")).grid(column=2, row=1, ipady=10)
-ttk.Button(mainframe, width=20, text="Dodaj dzień", command=lambda: parkomat.addDay()).grid(column=2, row=2, ipady=0)
-ttk.Button(mainframe, width=20, text="Odejmij dzień", command=lambda: parkomat.subDay()).grid(column=2, row=3, ipady=0)
 
-# ttk.Label(mainframe, width=20, text="xxx").grid(column=1, row=1, ipady=10)
-# ttk.Label(mainframe, width=20, text="xxx").grid(column=1, row=1, ipady=10)
+    # Aktualna
+ttk.Button(mainframe, width=20, text="Aktualna data").grid(column=1, row=0, ipady=0)
+currentDay = ttk.Button(mainframe, width=20, text=parkomat.today.strftime("%D"))
+currentDay.grid(column=1, row=1, ipady=10)
+ttk.Button(mainframe, width=20, text="Dodaj dzień", command=lambda: updateTime("+day")).grid(column=1, row=2, ipady=0)
+ttk.Button(mainframe, width=20, text="Odejmij dzień", command=lambda: updateTime("-day")).grid(column=1, row=3, ipady=0)
+
+    # Wyjazdu
+ttk.Button(mainframe, width=20, text="Data wyjazdu").grid(column=4, row=0, ipady=0)
+departureDate = ttk.Button(mainframe, width=20, text=parkomat.departure.strftime("%D"))
+departureDate.grid(column=4, row=1, ipady=10)
 
 # Godzina
-ttk.Button(mainframe, width=20, text="Godzina").grid(column=3, row=0, ipady=0)
-ttk.Button(mainframe, width=20, text=parkomat.today.strftime("%H:%M")).grid(column=3, row=1, ipady=10)
-ttk.Button(mainframe, width=20, text="Dodaj 5 minut", command=lambda: parkomat.add5Mins()).grid(column=3, row=2,
-                                                                                                ipady=0)
-ttk.Button(mainframe, width=20, text="Odejmij 5 minut", command=lambda: parkomat.sub5Mins()).grid(column=3, row=3,
-                                                                                                  ipady=0)
+
+    #Aktualna
+ttk.Button(mainframe, width=20, text="Aktualna godzina").grid(column=2, row=0, ipady=0)
+currentHour = ttk.Button(mainframe, width=20, text=parkomat.today.strftime("%H:%M"))
+currentHour.grid(column=2, row=1, ipady=10)
+ttk.Button(mainframe, width=20, text="Dodaj godzine", command=lambda: updateTime("+hour")).grid(column=2, row=2, ipady=0)
+ttk.Button(mainframe, width=20, text="Odejmij godzine", command=lambda: updateTime("-hour")).grid(column=2, row=3, ipady=0)
+ttk.Button(mainframe, width=20, text="Dodaj minute", command=lambda: updateTime("+min")).grid(column=2, row=4, ipady=0)
+ttk.Button(mainframe, width=20, text="Odejmij minute", command=lambda: updateTime("-min")).grid(column=2, row=5, ipady=0)
+
+    # Wyjazdu
+ttk.Button(mainframe, width=20, text="Godzina wyjazdu").grid(column=5, row=0, ipady=0)
+departureHour = ttk.Button(mainframe, width=20, text=parkomat.departure.strftime("%H:%M"))
+departureHour.grid(column=5, row=1, ipady=10)
 
 # Dodanie przycisków do wrzucania monet
-ttk.Label(mainframe, width=20).grid(column=0, row=4, ipady=10)  # przerwa
+ttk.Label(mainframe, width=20).grid(column=0, row=6, ipady=10)  # przerwa
 for i, value in enumerate([0.01, 0.02, 0.05, 0.10, 0.20, 0.5, 1, 2, 5, 10, 20, 50]):
     if value <= 5:
         ttk.Button(mainframe, width=20, text="Wrzuć %0.2f zł" % (value), command=lambda value=value:
-        parkomat.addCoin(Moneta(value, "PLN"))).grid(column=i % 6, row=6 + i // 6)
+        parkomat.addCoin(Moneta(value, "PLN"))).grid(column=i % 6, row=7 + i // 6)
     else:
         ttk.Button(mainframe, width=20, text="Wrzuć %0.2f zł" % (value), command=lambda value=value:
-        parkomat.addBill(Banknot(value, "PLN"))).grid(column=i % 6, row=6 + i // 6)
+        parkomat.addBill(Banknot(value, "PLN"))).grid(column=i % 6, row=7 + i // 6)
 
-# Dodanie przycisku sprawdzenia wartości zawartości
+# tutaj kod testowy \/  \/  \/  \/
+
+
+
+# tutaj kod testowy /\  /\  /\  /\
+
+# Zapętlenie okna
+
 window.mainloop()
+
+
