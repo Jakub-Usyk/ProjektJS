@@ -90,8 +90,7 @@ for i, value in enumerate([0.01, 0.02, 0.05, 0.10, 0.20, 0.5, 1, 2, 5, 10, 20, 5
 
 # tutaj kod testowy \/  \/  \/  \/
 
-#d = datetime(2002, 12, 31, 10, 10)
-#print(d.strftime("%D"))
+
 
 # tutaj kod testowy /\  /\  /\  /\
 

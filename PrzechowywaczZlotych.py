@@ -37,4 +37,3 @@ class PrzechowywaczZlotych:
         for money in self._money:
             suma += money.getValue()
         return suma
-
