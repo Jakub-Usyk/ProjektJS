@@ -44,8 +44,6 @@ class Parkomat(PrzechowywaczZlotych):
         oldMinute = self.today.minute
         self.today = datetime(newYear, newMonth, newDay, oldHour, oldMinute)
 
-
-
     def changeTime(self, newTime):
         for el in newTime:
             if not el.isnumeric() and el != ":":

@@ -71,7 +71,6 @@ departureDate.grid(column=4, row=1, ipady=10)
 ttk.Button(mainframe, width=20, text="Aktualna godzina").grid(column=2, row=0, ipady=0)
 currentTime = ttk.Button(mainframe, width=20, text=parkomat.today.strftime("%H:%M"))
 currentTime.grid(column=2, row=1, ipady=10)
-
 ttk.Button(mainframe, width=20, text="(Kliknij aby zmienić)", command=lambda: changeTime()).grid(column=2, row=2, ipady=0)
 
     # Wyjazdu
