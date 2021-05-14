@@ -2,6 +2,14 @@ from tkinter import *
 from tkinter import ttk
 from Parkomat import *
 
+def updateDate(win):
+    currentDate.config(text=parkomat.today.strftime("%D"))
+    win.destroy()
+
+def updateTime(win):
+    currentTime.config(text=parkomat.today.strftime("%H:%M"))
+    win.destroy()
+
 def changeDate():
     dateWindow = Tk()
     dateWindow.geometry("120x180")
@@ -13,8 +21,7 @@ def changeDate():
     newDate.grid(column=0, row=1, ipady=0)
     ttk.Label(dateWindowFrame, width=20).grid(column=0, row=2)  # przerwa
     ttk.Button(dateWindowFrame, width=10, text="Wprowadź", command=lambda: parkomat.changeDate(newDate.get())).grid(column=0, row=3, ipady=5)
-    ttk.Button(dateWindowFrame, width=10, text="Zatwierdź", command=lambda:
-    currentDate.config(text=parkomat.today.strftime("%D"))).grid(column=0, row=4, ipady=5)
+    ttk.Button(dateWindowFrame, width=10, text="Zatwierdź", command=lambda: updateDate(dateWindow)).grid(column=0, row=4, ipady=5)
 
 def changeTime():
     timeWindow = Tk()
@@ -27,8 +34,7 @@ def changeTime():
     newTime.grid(column=0, row=1, ipady=0)
     ttk.Label(timeWindowFrame, width=20).grid(column=0, row=2)  # przerwa
     ttk.Button(timeWindowFrame, width=10, text="Wprowadź", command=lambda: parkomat.changeTime(newTime.get())).grid(column=0, row=3, ipady=5)
-    ttk.Button(timeWindowFrame, width=10, text="Zatwierdź", command=lambda:
-    currentTime.config(text=parkomat.today.strftime("%H:%M"))).grid(column=0, row=4, ipady=5)
+    ttk.Button(timeWindowFrame, width=10, text="Zatwierdź", command=lambda: updateTime(timeWindow)).grid(column=0, row=4, ipady=5)
 
 # TWORZENIE TABELI
 parkomat = Parkomat("KR12AB3", [0.01, 0.02, 0.05, 0.20, 0.5, 1, 2, 5, 10, 20, 50])
