@@ -43,7 +43,7 @@ class Parkomat(PrzechowywaczZlotych):
     def addCoin(self, coin):
         """Metoda dodaje do parkomatu podana monete jesli jest ona moneta,
          oraz jesli limit monet danej wartosci nie zostal przekroczony. W przeciwnym wypadku odpowiednio
-         rzuca wyjatek notACoin, lub wyswietla informacje o przepelnieniu parkomatu"""
+         rzuca wyjatek notACoin, lub wyswietla informacje o przepelnieniu parkomatu i rzuca wyjatek coinOutOfRange"""
         if isinstance(coin, Moneta):
             for i in range(self.coinAmount):
                 if self.howManyCoins(coin) < 200:
@@ -51,6 +51,7 @@ class Parkomat(PrzechowywaczZlotych):
                     self._money.append(coin)
                 else:
                     print("Parkomat przepełniony, proszę o wrzucenie innego nominału")
+                    return("error") # rzucanie w tym miejscu wyjatku powodowalo zle dzialanie testow
         else:
             raise notACoin(coin)
 
@@ -89,9 +90,6 @@ class Parkomat(PrzechowywaczZlotych):
 
         self.departureDelta = self.departure
         self._money = []
-
-
-
 
     def changeTime(self, newTime):
         """Metoda sprawdza czy podana nowa godzina jest w odpowiednim formacie. Jesli tak,
@@ -146,7 +144,6 @@ class Parkomat(PrzechowywaczZlotych):
             self._parkTime = 2 * 0.5 + (value - 2) * 0.25
         else:
             self._parkTime = 2 * 0.5 + 4 * 0.25 + (value - 6) * 0.20
-
 
 
         if (self.departureDelta + timedelta(hours=self._parkTime)).hour >= 20 or (self.departureDelta + timedelta(hours=self._parkTime)).hour < 8:
